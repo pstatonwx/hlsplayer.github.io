@@ -19,8 +19,10 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <div class="container">
-        <input type="text" id="link" placeholder="Put Link Here">
-        <button id="play-button" onclick="playVideo()">Play</button>
+        <div class="link-container">
+            <input type="text" id="link" placeholder="Put .m3u8 Link Here">
+            <button id="play-button" onclick="playVideo()">Play</button>
+        </div>
         <video id="videoElement" controls></video>
     </div>
 
@@ -38,6 +40,8 @@
             }
         }
     </script>
+
+
 </body>
 
 </html>
