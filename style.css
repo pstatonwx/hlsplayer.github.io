@@ -3,6 +3,27 @@ html {
   overflow: hidden;
 }
 
+.title-container {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.title-image {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+#title-text {
+  font-size: 50px;
+  color: white;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -17,7 +38,7 @@ html {
 
 .link-container {
   position: absolute;
-  top: 15%;
+  top: 20%;
 }
 
 #link {
