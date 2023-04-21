@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Custom browser tag icon -->
+    <link rel="icon"
+        href="https://upload.wikimedia.org/wikipedia/commons/7/77/The_Weather_Channel_logo_2005-present.svg"
+        type="image/x-icon" />
+    <title>TWC HLS Player</title>
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <div class="container">
+        <input type="text" id="link" placeholder="Put Link Here">
+        <button id="play-button" onclick="playVideo()">Play</button>
+        <video id="videoElement" controls></video>
+    </div>
+
+
+    <script>
+        function playVideo() {
+            if (Hls.isSupported()) {
+                var video = document.getElementById('videoElement');
+                var hls = new Hls();
+                hls.loadSource(document.getElementById('link').value);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
