@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HLS Stream Player</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <div class="bg-orb orb-left" aria-hidden="true"></div>
+    <div class="bg-orb orb-right" aria-hidden="true"></div>
+
+    <main class="page-shell">
+      <header class="hero">
+        <h1>TWC HLS Player</h1>
+        <p class="subtitle">Paste an HLS playlist link and play it in the panel below.</p>
+      </header>
+
+      <section class="player-card" aria-label="Player controls and stream output">
+        <form id="stream-form" class="controls" autocomplete="off">
+          <label for="stream-url" class="field-label">HLS Link</label>
+          <div class="input-row">
+            <input
+              id="stream-url"
+              name="stream-url"
+              type="url"
+              placeholder="https://example.com/live/stream.m3u8"
+              required
+              spellcheck="false"
+            />
+            <button id="play-button" type="submit">Play Stream</button>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite">Waiting for a stream URL.</p>
+        </form>
+
+        <div class="video-shell">
+          <video id="video" controls playsinline preload="auto"></video>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script>
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+  </body>
+</html>
