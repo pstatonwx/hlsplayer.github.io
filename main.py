@@ -1,10 +1,34 @@
 import os
+import socket
 from urllib.parse import urlparse
 
 from flask import Flask, jsonify, render_template, request
 from waitress import serve
 
 app = Flask(__name__)
+
+
+def get_lan_ip() -> str:
+    # Use a UDP socket trick to discover the preferred outbound local IP.
+    probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        probe.connect(("8.8.8.8", 80))
+        ip = probe.getsockname()[0]
+        if ip and not ip.startswith("127."):
+            return ip
+    except OSError:
+        pass
+    finally:
+        probe.close()
+
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+        if ip and not ip.startswith("127."):
+            return ip
+    except OSError:
+        pass
+
+    return "127.0.0.1"
 
 
 @app.get("/")
@@ -22,10 +46,20 @@ def validate_url():
 
     parsed = urlparse(raw_url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-        return jsonify({"ok": False, "reason": "URL must start with http:// or https://."}), 400
+        return (
+            jsonify(
+                {"ok": False, "reason": "URL must start with http:// or https://."}
+            ),
+            400,
+        )
 
     if ".m3u8" not in raw_url.lower():
-        return jsonify({"ok": False, "reason": "URL should point to an HLS .m3u8 playlist."}), 400
+        return (
+            jsonify(
+                {"ok": False, "reason": "URL should point to an HLS .m3u8 playlist."}
+            ),
+            400,
+        )
 
     return jsonify({"ok": True})
 
@@ -35,9 +69,9 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", "8080"))
 
     if host == "0.0.0.0":
-        display_host = "127.0.0.1"
+        lan_host = get_lan_ip()
     else:
-        display_host = host
+        lan_host = host
 
-    print(f"HLS Player is running at: http://{display_host}:{port}", flush=True)
+    print(f"HLS Player LAN URL: http://{lan_host}:{port}", flush=True)
     serve(app, host=host, port=port)
